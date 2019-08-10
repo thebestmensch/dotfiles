@@ -4,9 +4,10 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-# Python Virtualenvwrapper
-export WORKON_HOME=$HOME/.python_envs
-#source /Library/Frameworks/Python.framework/Versions/2.7/bin/virtualenvwrapper.sh
+# virtual envs
+source /usr/local/bin/virtualenvwrapper.sh
+workon default
+source $HOME/.node_envs/default/bin/activate
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -26,7 +27,7 @@ plugins=(
 	rails
 	rbenv
 	git
-	npm
+#	npm
 	brew
 	extract
 	docker
@@ -71,10 +72,10 @@ export EDITOR='vim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # rbenv
-if rbenv --version; then eval "$(rbenv init -)"; fi
+if hash rbenv 2>/dev/null; then eval "$(rbenv init -)"; fi
 
 # nodeenv
-if rbenv --version; then eval "$(nodenv init -)"; fi
+if hash nodeenv 2>/dev/null; then source $HOME/.node_envs/default/bin/activate; fi
 
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
@@ -100,7 +101,7 @@ function zsh_package_json () {
 
 POWERLEVEL9K_MODE='nerdfont-complete'
 
-POWERLEVEL9K_CUSTOM_NODE_VERSION="if nodeenv --version; then echo \$(nodenv local); fi"
+POWERLEVEL9K_CUSTOM_NODE_VERSION="if hash nodeenv 2>/dev/null; then echo \$(nodeenv local); fi"
 POWERLEVEL9K_CUSTOM_NODE_VERSION_BACKGROUND='green'
 POWERLEVEL9K_CUSTOM_PACKAGE_JSON=zsh_package_json
 POWERLEVEL9K_CUSTOM_PACKAGE_JSON_BACKGROUND='green'
@@ -158,7 +159,7 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # vscode settings
 
-if hash code; then ln -fs ~/.vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json; fi
+if hash code 2>/dev/null; then ln -fs ~/.vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json; fi
 
-if hash code; then cat ~/.vscode/extensions.list | xargs -L1 code --install-extension; fi
+if hash code 2>/dev/null; then cat ~/.vscode/extensions.list | xargs -L1 code --install-extension; fi
 
