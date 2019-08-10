@@ -5,9 +5,10 @@
 export ZSH=$HOME/.oh-my-zsh
 
 # virtual envs
+export WORKON_HOME=$HOME/.python_envs
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
 workon default
-source $HOME/.node_envs/default/bin/activate
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -39,7 +40,6 @@ plugins=(
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
 
 source $HOME/.oh-my-zsh/oh-my-zsh.sh
-
 
 # User configuration
 
@@ -74,35 +74,10 @@ export EDITOR='vim'
 # rbenv
 if hash rbenv 2>/dev/null; then eval "$(rbenv init -)"; fi
 
-# nodeenv
-if hash nodeenv 2>/dev/null; then source $HOME/.node_envs/default/bin/activate; fi
-
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
-# prompt (powerlevel 9k)
-function zsh_package_json () {
-  local pkgjson=$(pwd)/package.json
-  if [[ -f $pkgjson ]]; then
-    local nodever npmver pkgver
-
-    if [[ $POWERLEVEL9K_CUSTOM_PACKAGE_JSON_NODEVER != 'false' ]]; then
-      nodever=$POWERLEVEL9K_NODE_ICON' '$(node --version)
-    fi
-
-    if [[ $POWERLEVEL9K_CUSTOM_PACKAGE_JSON_PKGVER != 'false' ]]; then
-      local actualpkgver=$(node -p "require('$pkgjson').version || ''")
-      [[ -z $actualpkgver ]] || pkgver=$POWERLEVEL9K_PACKAGE_ICON' '$actualpkgver
-    fi
-
-    env echo -n $nodever $pkgver
-  fi
-}
-
 POWERLEVEL9K_MODE='nerdfont-complete'
-
-POWERLEVEL9K_CUSTOM_NODE_VERSION="if hash nodeenv 2>/dev/null; then echo \$(nodeenv local); fi"
-POWERLEVEL9K_CUSTOM_NODE_VERSION_BACKGROUND='green'
 POWERLEVEL9K_CUSTOM_PACKAGE_JSON=zsh_package_json
 POWERLEVEL9K_CUSTOM_PACKAGE_JSON_BACKGROUND='green'
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -144,7 +119,7 @@ NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status custom_node_version rbenv virtualenv)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status rbenv virtualenv)
 HIST_STAMPS="mm/dd/yyyy"
 DISABLE_UPDATE_PROMPT=true
 
@@ -158,8 +133,10 @@ if [ -f '/Users/jm/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Us
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # vscode settings
-
-if hash code 2>/dev/null; then ln -fs ~/.vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json; fi
-
-if hash code 2>/dev/null; then cat ~/.vscode/extensions.list | xargs -L1 code --install-extension; fi
+testcmd () {
+    command -v "$1" >/dev/null
+}
+CODE_PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+if testcmd $CODE_PATH 2>/dev/null; then ln -fs $HOME/.vscode/settings.json $HOME/Library/Application\ Support/Code/User/settings.json; fi
+if testcmd $CODE_PATH 2>/dev/null; then cat $HOME/.vscode/extensions.list | xargs -L1 code --install-extension; fi
 

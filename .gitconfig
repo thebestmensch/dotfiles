@@ -3,3 +3,5 @@
 	email = james@jamesmensch.com
 [core]
 	ignoreCase = false
+[credential]
+	helper = store

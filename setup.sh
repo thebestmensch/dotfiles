@@ -11,12 +11,6 @@ defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "$HOME/.ite
 # Tell iTerm2 to use the custom preferences in the directory
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
-# nodeenv
-sudo easy_install nodeenv
-mkdir -p $HOME/.node_envs
-nodeenv $HOME/.node_envs/default
-source $HOME/.node_envs/default/bin/activate
-
 # python virtualenvwrapper
 brew install python3
 pip3 install virtualenvwrapper
@@ -36,3 +30,5 @@ git clone https://github.com/bhilburn/powerlevel9k.git $HOME/.oh-my-zsh/custom/t
 # change default shell
 exec zsh
 source $HOME/.zshrc
+
+echo "Done. Restart iterm2."
