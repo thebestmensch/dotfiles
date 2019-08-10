@@ -2,14 +2,11 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/jm/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Python Virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/Devel
-source /Library/Frameworks/Python.framework/Versions/2.7/bin/virtualenvwrapper.sh
-
-export NPM_TOKEN="72736503-ed23-49d4-b514-6edce41a3775"
+export WORKON_HOME=$HOME/.python_envs
+#source /Library/Frameworks/Python.framework/Versions/2.7/bin/virtualenvwrapper.sh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -40,13 +37,8 @@ plugins=(
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
 
-source $ZSH/oh-my-zsh.sh
+source $HOME/.oh-my-zsh/oh-my-zsh.sh
 
-# Alias
-alias tc='/Users/jm/Documents/local/tc'
-alias jm='/Users/jm/Documents/local/jm'
-alias mf='/Users/jm/Documents/local/mf'
-alias oa='/Users/jm/Documents/local/oa'
 
 # User configuration
 
@@ -79,10 +71,10 @@ export EDITOR='vim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # rbenv
-eval "$(rbenv init -)"
+if rbenv --version; then eval "$(rbenv init -)"; fi
 
 # nodeenv
-eval "$(nodenv init -)"
+if rbenv --version; then eval "$(nodenv init -)"; fi
 
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
@@ -108,7 +100,7 @@ function zsh_package_json () {
 
 POWERLEVEL9K_MODE='nerdfont-complete'
 
-POWERLEVEL9K_CUSTOM_NODE_VERSION="echo \$(nodenv local)"
+POWERLEVEL9K_CUSTOM_NODE_VERSION="if nodeenv --version; then echo \$(nodenv local); fi"
 POWERLEVEL9K_CUSTOM_NODE_VERSION_BACKGROUND='green'
 POWERLEVEL9K_CUSTOM_PACKAGE_JSON=zsh_package_json
 POWERLEVEL9K_CUSTOM_PACKAGE_JSON_BACKGROUND='green'
