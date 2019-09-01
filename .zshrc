@@ -1,142 +1,201 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+#!/bin/bash
 
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+FORCE_ALL=false
+SHOULD_CONFIGURE_VSCODE=false # turn off to save load time
+ZSHRC_DIR=$(pwd)'/.zshrc'
+LOG_COLOR='\e[32m'
 
-# virtual envs
-export WORKON_HOME=$HOME/.python_envs
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
-source /usr/local/bin/virtualenvwrapper.sh
-workon default
+echo log_progress_inline $LOG_COLOR
+echo log_progress_inline 'Running .zshrc at '$ZSHRC_DIR
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="powerlevel9k/powerlevel9k"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-	virtualenvwrapper
-	ruby
-	rails
-	rbenv
-	git
-#	npm
-	brew
-	extract
-	docker
-	osx
-	zsh-autosuggestions
-	zsh-syntax-highlighting
-)
-
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
-
-source $HOME/.oh-my-zsh/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-export EDITOR='vim'
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# rbenv
-if hash rbenv 2>/dev/null; then eval "$(rbenv init -)"; fi
-
-# yarn
-export PATH="$HOME/.yarn/bin:$PATH"
-
-POWERLEVEL9K_MODE='nerdfont-complete'
-POWERLEVEL9K_CUSTOM_PACKAGE_JSON=zsh_package_json
-POWERLEVEL9K_CUSTOM_PACKAGE_JSON_BACKGROUND='green'
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_beginning"
-POWERLEVEL9K_RVM_BACKGROUND="black"
-POWERLEVEL9K_RVM_FOREGROUND="249"
-POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
-POWERLEVEL9K_TIME_BACKGROUND="black"
-POWERLEVEL9K_TIME_FOREGROUND="249"
-POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%I:%M  \UF133  %m.%d.%y}"
-POWERLEVEL9K_RVM_BACKGROUND="black"
-POWERLEVEL9K_RVM_FOREGROUND="249"
-POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
-POWERLEVEL9K_STATUS_VERBOSE=false
-POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
-POWERLEVEL9K_VCS_CLEAN_BACKGROUND='green'
-POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='white'
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='black'
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='black'
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='blue'
-POWERLEVEL9K_FOLDER_ICON=''
-POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
-POWERLEVEL9K_STATUS_VERBOSE=false
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-POWERLEVEL9K_VCS_COMMIT_ICON="\uf417"
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-POWERLEVEL9K_CUSTOM_BATTERY_STATUS="prompt_zsh_battery_level"
-POWERLEVEL9K_RBENV_PROMPT_ALWAYS_SHOW=true
-NODE_VIRTUAL_ENV_DISABLE_PROMPT=1
-VIRTUAL_ENV_DISABLE_PROMPT=1
-
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status rbenv virtualenv)
-HIST_STAMPS="mm/dd/yyyy"
-DISABLE_UPDATE_PROMPT=true
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jm/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jm/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jm/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jm/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-# dotfiles
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
-# vscode settings
-testcmd () {
-    command -v "$1" >/dev/null
+# https://stackoverflow.com/questions/6569478/detect-iflog_progress_inlinexecutable-file-is-on-users-path
+function is_bin_in_path {
+  builtin type -P "$1" &> /dev/null
 }
-CODE_PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
-if testcmd $CODE_PATH 2>/dev/null; then ln -fs $HOME/.vscode/settings.json $HOME/Library/Application\ Support/Code/User/settings.json; fi
-if testcmd $CODE_PATH 2>/dev/null; then cat $HOME/.vscode/extensions.list | xargs -L1 code --install-extension; fi
 
+do_if_cmd_not_exists () {
+  CMD=$1
+  FUNC=$2
+
+  if is_bin_in_path $CMD
+  then
+    $FUNC
+  fi
+}
+
+log_progress () {
+  echo -ne $LOG_COLOR
+  echo $1
+  echo -ne '\e[39m'
+}
+
+log_progress_inline () {
+  echo -ne $LOG_COLOR
+  echo -n $1
+  echo -ne '\e[39m'
+}
+
+##
+## MISC PATH CHANGES
+##
+update_paths () {
+  log_progress_inline 'Updating path variables...'
+  export PATH=$HOME/bin:/usr/local/bin:$PATH # might need if coming from bash
+  export SSH_KEY_PATH="~/.ssh/rsa_id"
+  export PATH="$HOME/.yarn/bin:$PATH"
+  export ANTIGEN_PATH="~/.dotfiles"
+  export ZSH=$HOME/.oh-my-zsh
+  log_progress 'ok'
+}
+
+##
+## TERMINAL ALIASES
+##
+set_terminal_aliases () {
+  log_progress_inline 'Adding terminal aliases...'
+  alias dkc="docker-compose"
+  alias dk="docker"
+  alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+  log_progress 'ok'
+}
+
+##
+## TERMINAL DEFAULT OVERRIDES
+##
+set_terminal_default_programs () {
+  export EDITOR='vim'
+}
+
+configure_ssh () {
+  log_progress_inline 'Starting ssh-agent...'
+  eval $(ssh-agent -s) &>/dev/null
+  log_progress 'ok'
+}
+
+##
+## INSTALL BREW
+##
+install_homebrew () {
+  log_progress_inline 'Installing homebrew...'
+  eval "CI=1 /usr/bin/ruby log_progress_inline '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)'"
+  log_progress 'ok'
+
+  log_progress 'Updating brew...'
+  brew update
+  log_progress 'ok'
+
+  log_progress 'Installing from Brewfile'
+  brew bundle
+  log_progress 'ok'
+}
+
+##
+## VIRTUAL ENVIRONMENT SETUP: Virtualenvwrapper (python), NVM (npm), rbenv (ruby)
+##
+
+configure_virtualenvwrapper () {
+  log_progress_inline '    Installing virtualenvwrapper...'
+  export WORKON_HOME=$HOME/.python_envs
+  export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
+  source /usr/local/bin/virtualenvwrapper.sh
+  log_progress 'ok'
+}
+
+configure_rbenv () {
+  log_progress_inline '    Configuring rbenv...'
+  eval "$(rbenv init -)" &>/dev/null
+  log_progress 'ok'
+}
+
+configure_nvm () {
+  log_progress_inline '    Configuring nvm...'
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  log_progress 'ok'
+}
+
+configure_virtual_envs () {
+  log_progress 'Configuring virtual environments...'
+  configure_virtualenvwrapper
+  configure_rbenv
+  configure_nvm
+  log_progress 'ok'
+}
+
+##
+## VSCODE EXTENSIONS & SETTINGS
+##
+do_configure_vscode () {
+  log_progress 'Configuring VSCode...'
+  ln -fs $HOME/.vscode/settings.json $HOME/Library/Application\ Support/Code/User/settings.json
+  cat $HOME/.vscode/extensions.list | xargs -L1 code --installlog_progress_inlinextension
+  log_progress 'ok'
+}
+
+configure_vscode () {
+  if $SHOULD_CONFIGURE_VSCODE
+  then
+    VSCODE_PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+    CMD = $VSCODE_PATH
+    do_if_cmd_not_exists CMD configure_vscode
+  fi
+}
+
+##
+## ZSH CONFIG
+##
+configure_ohmyzsh () {
+  log_progress_inline 'Setting up oh-my-zsh...'
+  export ZSH=$HOME/.oh-my-zsh
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+  ZSH_THEME="powerlevel9k/powerlevel9k"
+  source $HOME/.oh-my-zsh/oh-my-zsh.sh
+  log_progress 'ok'
+}
+
+##
+## ZSH THEME
+##
+## Antigen is required for zsh theme (and its nice on its own)
+## https://github.com/zsh-users/antigen
+##
+configure_antigen () {
+  log_progress 'Configuring antigen...'
+
+  source /usr/local/share/antigen/antigen.zsh
+  source ~/.zsh-theme
+  antigen use oh-my-zsh
+  antigen bundle StackExchange/blackbox
+  antigen bundle brew
+  antigen bundle command-not-found
+  antigen bundle common-aliases
+  antigen bundle docker
+  antigen bundle docker-compose
+  antigen bundle git
+  antigen bundle golang
+  antigen bundle npm
+  antigen bundle nvm
+  antigen bundle python
+  antigen bundle tmux
+  antigen theme bhilburn/powerlevel9k powerlevel9k
+  antigen apply
+  log_progress 'ok'
+}
+
+run () {
+  update_paths
+  set_terminal_aliases
+  set_terminal_default_programs
+  configure_ssh
+
+  do_if_cmd_not_exists "brew" install_homebrew
+  configure_virtual_envs
+
+  configure_vscode
+  configure_ohmyzsh
+  configure_antigen
+
+  source $HOME/.oh-my-zsh/oh-my-zsh.sh
+}
+run
