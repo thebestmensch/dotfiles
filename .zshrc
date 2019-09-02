@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/zsh
 
 FORCE_ALL=false
 SHOULD_CONFIGURE_VSCODE=false # turn off to save load time
 ZSHRC_DIR=$(pwd)'/.zshrc'
 LOG_COLOR='\e[32m'
-
-echo log_progress_inline $LOG_COLOR
-echo log_progress_inline 'Running .zshrc at '$ZSHRC_DIR
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
 
 # https://stackoverflow.com/questions/6569478/detect-iflog_progress_inlinexecutable-file-is-on-users-path
 function is_bin_in_path {
@@ -56,6 +56,10 @@ set_terminal_aliases () {
   alias dkc="docker-compose"
   alias dk="docker"
   alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+  alias sms="cd ~/Documents/local/nk/super-mario-services"
+  alias smw="cd ~/Documents/local/nk/super-mario-services/services/super-mario-world"
+  alias nk="cd ~/Documents/local/nk"
+  alias oa="cd ~/Documents/local/oa"
   log_progress 'ok'
 }
 
@@ -94,7 +98,7 @@ install_homebrew () {
 ##
 
 configure_virtualenvwrapper () {
-  log_progress_inline '    Installing virtualenvwrapper...'
+  log_progress_inline '  Installing virtualenvwrapper...'
   export WORKON_HOME=$HOME/.python_envs
   export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
   source /usr/local/bin/virtualenvwrapper.sh
@@ -102,13 +106,13 @@ configure_virtualenvwrapper () {
 }
 
 configure_rbenv () {
-  log_progress_inline '    Configuring rbenv...'
+  log_progress_inline '  Configuring rbenv...'
   eval "$(rbenv init -)" &>/dev/null
   log_progress 'ok'
 }
 
 configure_nvm () {
-  log_progress_inline '    Configuring nvm...'
+  log_progress_inline '  Configuring nvm...'
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -143,30 +147,18 @@ configure_vscode () {
 }
 
 ##
-## ZSH CONFIG
-##
-configure_ohmyzsh () {
-  log_progress_inline 'Setting up oh-my-zsh...'
-  export ZSH=$HOME/.oh-my-zsh
-  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
-  ZSH_THEME="powerlevel9k/powerlevel9k"
-  source $HOME/.oh-my-zsh/oh-my-zsh.sh
-  log_progress 'ok'
-}
-
-##
 ## ZSH THEME
 ##
 ## Antigen is required for zsh theme (and its nice on its own)
 ## https://github.com/zsh-users/antigen
 ##
 configure_antigen () {
-  log_progress 'Configuring antigen...'
+  log_progress_inline 'Configuring antigen...'
 
-  source /usr/local/share/antigen/antigen.zsh
-  source ~/.zsh-theme
+  source antigen.zsh
+  source .zsh-theme
+
   antigen use oh-my-zsh
-  antigen bundle StackExchange/blackbox
   antigen bundle brew
   antigen bundle command-not-found
   antigen bundle common-aliases
@@ -174,16 +166,27 @@ configure_antigen () {
   antigen bundle docker-compose
   antigen bundle git
   antigen bundle golang
-  antigen bundle npm
   antigen bundle nvm
   antigen bundle python
+  antigen bundle pip
+  antigen bundle jira
   antigen bundle tmux
+  antigen bundle yarn
+  antigen bundle virtualenv
+
+  antigen bundle zsh-users/zsh-autosuggestions
+  antigen bundle zsh-users/zsh-completions
+  antigen bundle zsh-users/zsh-syntax-highlighting
+
   antigen theme bhilburn/powerlevel9k powerlevel9k
   antigen apply
+
   log_progress 'ok'
 }
 
 run () {
+  log_progress 'Running .zshrc at '$ZSHRC_DIR
+
   update_paths
   set_terminal_aliases
   set_terminal_default_programs
@@ -193,9 +196,9 @@ run () {
   configure_virtual_envs
 
   configure_vscode
-  configure_ohmyzsh
   configure_antigen
 
-  source $HOME/.oh-my-zsh/oh-my-zsh.sh
+  # direnv
+  eval "$(direnv hook zsh)"
 }
 run
