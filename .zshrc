@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 FORCE_ALL=false
-SHOULD_CONFIGURE_VSCODE=false # turn off to save load time
+SHOULD_CONFIGURE_VSCODE=false
 ZSHRC_DIR=$(pwd)'/.zshrc'
 LOG_COLOR='\e[32m'
 ENABLE_CORRECTION="true"
@@ -133,7 +133,7 @@ configure_virtual_envs () {
 do_configure_vscode () {
   log_progress 'Configuring VSCode...'
   ln -fs $HOME/.vscode/settings.json $HOME/Library/Application\ Support/Code/User/settings.json
-  cat $HOME/.vscode/extensions.list | xargs -L1 code --installlog_progress_inlinextension
+  cat $HOME/.vscode/extensions.list | xargs -L1 code --install-extension
   log_progress 'ok'
 }
 
@@ -141,8 +141,8 @@ configure_vscode () {
   if $SHOULD_CONFIGURE_VSCODE
   then
     VSCODE_PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
-    CMD = $VSCODE_PATH
-    do_if_cmd_not_exists CMD configure_vscode
+    configure_vscode
+#do_if_cmd_not_exists $VSCODE_PATH configure_vscode
   fi
 }
 
