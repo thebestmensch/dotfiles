@@ -8,6 +8,8 @@ ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
 
+export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+
 # https://stackoverflow.com/questions/6569478/detect-iflog_progress_inlinexecutable-file-is-on-users-path
 function is_bin_in_path {
   builtin type -P "$1" &> /dev/null
@@ -60,6 +62,12 @@ set_terminal_aliases () {
   alias smw="cd ~/Documents/local/nk/super-mario-services/services/super-mario-world"
   alias nk="cd ~/Documents/local/nk"
   alias oa="cd ~/Documents/local/oa"
+  alias lgr="cd ~/Documents/local/lgr"
+  alias jm="cd ~/Documents/local/jm"
+  alias k="kubectl"
+  git config --global alias.branches "!echo '' && git for-each-ref --sort='authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads"
+
+
   log_progress 'ok'
 }
 
@@ -108,7 +116,7 @@ configure_virtualenvwrapper () {
 configure_rbenv () {
   log_progress_inline '  Configuring rbenv...'
   eval "$(rbenv init -)" &>/dev/null
-  log_progress 'ok'
+  log_progress 'rbenv ok'
 }
 
 configure_nvm () {
@@ -116,7 +124,9 @@ configure_nvm () {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  log_progress 'ok'
+  nvm install --lts
+  nvm use --lts
+  log_progress 'nvm ok'
 }
 
 configure_virtual_envs () {
@@ -124,7 +134,7 @@ configure_virtual_envs () {
   configure_virtualenvwrapper
   configure_rbenv
   configure_nvm
-  log_progress 'ok'
+  log_progress 'virtual envs ok'
 }
 
 ##
@@ -155,8 +165,8 @@ configure_vscode () {
 configure_antigen () {
   log_progress_inline 'Configuring antigen...'
 
-  source antigen.zsh
-  source .zsh-theme
+  source ~/antigen.zsh
+  source ~/.zsh-theme
 
   antigen use oh-my-zsh
   antigen bundle brew
@@ -202,3 +212,8 @@ run () {
   eval "$(direnv hook zsh)"
 }
 run
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+# Added by Amplify CLI binary installer
+export PATH="$HOME/.amplify/bin:$PATH"
